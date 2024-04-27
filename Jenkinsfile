@@ -31,7 +31,7 @@ pipeline {
         }
       }
     }
-i
+
 
     stage('Docker Build and Push') {
       steps {
