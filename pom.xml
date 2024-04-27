@@ -54,7 +54,7 @@
                 <dependencies>
                     <dependency>
                         <groupId>org.pitest</groupId>
-                        <artifactId>1.577</artifactId>
+                        <artifactId>pitest-junit5-plugin</artifactId>
                         <version>0.12</version>
                     </dependency>
                 </dependencies>
