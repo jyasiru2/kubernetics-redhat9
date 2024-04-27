@@ -54,12 +54,12 @@
                 <dependencies>
                     <dependency>
                         <groupId>org.pitest</groupId>
-                        <artifactId>pitest-junit5-plugin</artifactId>
+                        <artifactId>1.577</artifactId>
                         <version>0.12</version>
                     </dependency>
                 </dependencies>
                 <configuration>
-                    <mutationThreshold>60</mutationThreshold>
+                    <mutationThreshold>70</mutationThreshold>
                     <outputFormats>
                         <outputFormat>XML</outputFormat>
                         <outputFormat>HTML</outputFormat>
