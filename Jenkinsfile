@@ -32,11 +32,11 @@ pipeline {
       }
     }
 
-    stage('SCM Checkout') {
-      steps {
-        git 'https://github.com/foo/bar.git'
-      }
-    }
+//    stage('SCM Checkout') {
+//       steps {
+//         git 'https://github.com/foo/bar.git'
+//       }
+//     }
 
     stage('SonarQube Analysis') {
       steps {
