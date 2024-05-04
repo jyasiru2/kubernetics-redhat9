@@ -32,17 +32,18 @@ pipeline {
       }
     }
 
-//    stage('SCM Checkout') {
-//       steps {
-//         git 'https://github.com/foo/bar.git'
-//       }
-//     }
+    stage('SCM Checkout') {
+      steps {
+        checkout scm
+      }
+    }
 
     stage('SonarQube Analysis') {
       steps {
         script {
-          withSonarQubeEnv(credentialsId: 'f225455e-ea59-40fa-8af7-08176e86507a', installationName: '<sonarqubeInstallation>') {
-            sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.11.0.3922:sonar'
+          def mvn = tool 'Default Maven';
+          withSonarQubeEnv() {
+            sh "${mvn}/bin/mvn clean verify sonar:sonar -Dsonar.projectKey=NumericApplication -Dsonar.projectName='NumericApplication'"
           }
         }
       }
