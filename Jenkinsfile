@@ -47,7 +47,7 @@ pipeline {
       steps {
         withKubeConfig([credentialsId: 'kubeconfig']) {
           sh '''sed -i "s|yasiru1997/numeric-app2:${GIT_COMMIT}|yasiru1997/numeric-app2:${GIT_COMMIT}|g" k8s_deployment_service.yaml'''
-          sh "kubectl apply -f k8s_deployment_service.yaml --kubeconfig /home/j_yasiru2/.kube/config"
+          sh "kubectl apply -f k8s_deployment_service.yaml"
         }
       }
     }
