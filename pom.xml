@@ -47,14 +47,21 @@
     </dependencies>
 
 
+
     <build>
+
         <plugins>
+
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
 
-
+            <plugin>
+                <groupId>org.codehaus.sonar</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>2.5</version>
+            </plugin>
 
             <!-- PITest Mutation Plugin -->
             <plugin>
