@@ -32,11 +32,11 @@ pipeline {
       }
     }
 
-    stage('SCM Checkout') {
-      steps {
-        checkout scm
-      }
-    }
+//     stage('SCM Checkout') {
+//       steps {
+//         checkout scm
+//       }
+//     }
 
     stage('SonarQube Analysis') {
       steps {
