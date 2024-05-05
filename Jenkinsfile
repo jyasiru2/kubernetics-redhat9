@@ -11,8 +11,8 @@ pipeline {
 
     stage('Unit Tests - JUnit and Jacoco') {
       steps {
-        sh "mvn test"
-        
+        sh "sudo mvn test"
+
       }
       post {
         always {
