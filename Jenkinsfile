@@ -32,6 +32,23 @@ pipeline {
       }
     }
 
+    stage('Vulnerability Scan - Docker ') {
+          steps {
+            sh "mvn dependency-check:check"
+          }
+          post {
+            always {
+              dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
+            }
+          }
+        }
+
+
+
+
+
+
+
     stage('SCM Checkout') {
       steps {
         checkout scm
@@ -43,7 +60,7 @@ pipeline {
         script {
           def mvn = tool 'Default Maven';
           withSonarQubeEnv() {
-            sh "${mvn}/bin/mvn clean verify sonar:sonar -Dsonar.projectKey=NumericApplication -Dsonar.projectName='NumericApplication'"
+            sh "${mvn}/bin/mvn clean verify sonar:sonar -Dsonar.projectKey=NumericApplication -Dsonar.projectName='NumericApplication' -Dmaven.clean.failOnError=false"
           }
         }
       }
