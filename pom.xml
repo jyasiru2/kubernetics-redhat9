@@ -9,7 +9,6 @@
         <relativePath /> <!-- lookup parent from repository -->
     </parent>
 
-
     <groupId>com.devsecops</groupId>
     <artifactId>numeric</artifactId>
     <version>0.0.1</version>
@@ -41,53 +40,14 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
-        <!--        <dependency>-->
-        <!--            <groupId>org.sonarsource.scanner.maven</groupId>-->
-        <!--            <artifactId>sonar-maven-plugin</artifactId>-->
-        <!--            <version>3.11.0.3922</version>-->
-        <!--        </dependency>-->
-
     </dependencies>
 
     <build>
         <plugins>
-
             <!-- Spring Boot Maven Plugin -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-
-            <!--            <plugin>-->
-            <!--                <groupId>org.codehaus.mojo</groupId>-->
-            <!--                <artifactId>sonar-maven-plugin</artifactId>-->
-            <!--                <version>3.0.2</version>-->
-            <!--            </plugin>-->
-
-            <!-- Dependency Check Plugin -->
-            <plugin>
-                <groupId>org.owasp</groupId>
-                <artifactId>dependency-check-maven</artifactId>
-                <version>6.1.6</version>
-                <configuration>
-                    <format>ALL</format>
-                    <failBuildOnCVSS>8</failBuildOnCVSS>
-                    <!-- Fail the build for CVSS greater than or equal to 5 -->
-                    <!--
-                        Use internal mirroring of CVE contents
-                        Suppress files
-                        E.g. a company-wide suppression file and local project file
-                    -->
-                    <!--
-                        <cveUrlModified>http://internal-mirror.mycorp.com/nvdcve-1.1-modified.json.gz</cveUrlModified>
-                        <cveUrlBase>http://internal-mirror.mycorp.com/nvdcve-1.1-%d.json.gz</cveUrlBase>
-                        <suppressionFiles>
-                            <suppressionFile>http://example.org/suppression.xml</suppressionFile>
-                            <suppressionFile>project-suppression.xml</suppressionFile>
-                        </suppressionFiles>
-                    -->
-                </configuration>
             </plugin>
 
             <!-- PITest Mutation Plugin -->
@@ -108,6 +68,17 @@
                         <outputFormat>XML</outputFormat>
                         <outputFormat>HTML</outputFormat>
                     </outputFormats>
+                </configuration>
+            </plugin>
+
+            <!-- Dependency Check Plugin -->
+            <plugin>
+                <groupId>org.owasp</groupId>
+                <artifactId>dependency-check-maven</artifactId>
+                <version>6.1.6</version>
+                <configuration>
+                    <format>ALL</format>
+                    <failBuildOnCVSS>8</failBuildOnCVSS>
                 </configuration>
             </plugin>
         </plugins>
