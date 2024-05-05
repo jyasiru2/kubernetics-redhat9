@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.2.1.RELEASE</version>
         <relativePath />
-         <!-- lookup parent from repository -->
+        <!-- lookup parent from repository -->
     </parent>
-
 
     <groupId>com.devsecops</groupId>
     <artifactId>numeric</artifactId>
@@ -39,33 +41,16 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
-<!--        <dependency>-->
-<!--            <groupId>org.sonarsource.scanner.maven</groupId>-->
-<!--            <artifactId>sonar-maven-plugin</artifactId>-->
-<!--            <version>3.11.0.3922</version>-->
-<!--        </dependency>-->
-
     </dependencies>
 
-
-
     <build>
-
         <plugins>
-
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
 
-<!--            <plugin>-->
-<!--                <groupId>org.codehaus.mojo</groupId>-->
-<!--                <artifactId>sonar-maven-plugin</artifactId>-->
-<!--                <version>3.0.2</version>-->
-<!--            </plugin>-->
-
-            <!--                   Dependency Check Plugin                   -->
+            <!-- Dependency Check Plugin -->
             <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
@@ -74,23 +59,10 @@
                     <format>ALL</format>
                     <failBuildOnCVSS>12</failBuildOnCVSS>
                     <!-- fail the build for CVSS greater than or equal to 5 -->
-                    <!--
-                                use internal mirroring of CVE contents
-                                Suppress files
-                                E.g. a company-wide suppression file and local project file
-                               -->
-                    <!--
-                               <cveUrlModified>http://internal-mirror.mycorp.com/nvdcve-1.1-modified.json.gz</cveUrlModified>
-                                              <cveUrlBase>http://internal-mirror.mycorp.com/nvdcve-1.1-%d.json.gz</cveUrlBase>
-                               <suppressionFiles>
-                                                  <suppressionFile>http://example.org/suppression.xml</suppressionFile>
-                                                  <suppressionFile>project-suppression.xml</suppressionFile>
-                                              </suppressionFiles>
-                                           -->
                 </configuration>
             </plugin>
 
-<!-- PITest Mutation Plugin -->
+            <!-- PITest Mutation Plugin -->
             <plugin>
                 <groupId>org.pitest</groupId>
                 <artifactId>pitest-maven</artifactId>
@@ -112,8 +84,4 @@
             </plugin>
         </plugins>
     </build>
-
-
-
-
 </project>
