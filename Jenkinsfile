@@ -5,7 +5,7 @@ pipeline {
     stage('Build Artifact - Maven') {
       steps {
         sh "mvn clean package -DskipTests=true"
-        archive 'target/*.jar'
+        archiveArtifacts 'target/*.jar'
       }
     }
 
@@ -16,7 +16,7 @@ pipeline {
       post {
         always {
           junit 'target/surefire-reports/*.xml'
-          jacoco execPattern: 'target/jacoco.exec'
+          jacoco(execPattern: 'target/jacoco.exec')
         }
       }
     }
@@ -27,27 +27,21 @@ pipeline {
       }
       post {
         always {
-          pitmutation mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
+          pitMutation mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
         }
       }
     }
 
-    stage('Vulnerability Scan - Docker ') {
-          steps {
-            sh "mvn dependency-check:check"
-          }
-          post {
-            always {
-              dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
-            }
-          }
+    stage('Vulnerability Scan - Dependency Check') {
+      steps {
+        sh "mvn dependency-check:check"
+      }
+      post {
+        always {
+          dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
         }
-
-
-
-
-
-
+      }
+    }
 
     stage('SCM Checkout') {
       steps {
