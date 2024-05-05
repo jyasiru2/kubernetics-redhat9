@@ -51,7 +51,7 @@ public class NumericApplicationTests {
         this.mockMvc
                 .perform(get("/"))
                 .andDo(print())
-                .andExpect(content().string(""));
+                .andExpect(content().string("Kubernetes DevSecOps"));
     }
 
 
