@@ -43,7 +43,7 @@ pipeline {
       }
     }
 
-   /* stage('SCM Checkout') {
+    stage('SCM Checkout') {
       steps {
         checkout scm
       }
@@ -58,7 +58,7 @@ pipeline {
           }
         }
       }
-    }*/
+    }
 
     stage('Docker Build and Push') {
       steps {
