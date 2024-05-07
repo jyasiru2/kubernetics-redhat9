@@ -102,7 +102,7 @@
                     </dependency>
                 </dependencies>
                 <configuration>
-                    <mutationThreshold>40</mutationThreshold>
+                    <mutationThreshold>50</mutationThreshold>
                     <outputFormats>
                         <outputFormat>vimXML</outputFormat>
                         <outputFormat>HTML</outputFormat>
