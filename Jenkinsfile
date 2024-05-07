@@ -63,6 +63,18 @@ pipeline {
             }
         }
 
+        stage('Mutation Tests - PIT') {
+                    steps {
+                        sh "mvn org.pitest:pitest-maven:mutationCoverage"
+                    }
+                    post {
+                  always {
+                            pitMutation mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
+                            pitmutation killRatioMustImprove: false, minimumKillRatio: 50.0, mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
+                        }
+                     }
+                }
+
         stage('Kubernetes Deployment - DEV') {
             steps {
                 script {
@@ -74,17 +86,7 @@ pipeline {
             }
         }
 
-        stage('Mutation Tests - PIT') {
-            steps {
-                sh "mvn org.pitest:pitest-maven:mutationCoverage"
-            }
-            post {
-          always {
-                    pitMutation mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
-                    pitmutation killRatioMustImprove: false, minimumKillRatio: 50.0, mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
-                }
-             }
-        }
+
 
     }
 }
