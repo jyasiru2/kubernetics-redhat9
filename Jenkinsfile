@@ -68,7 +68,7 @@ pipeline {
             post {
                 always {
                     pitmutation killRatioMustImprove: false, minimumKillRatio: 50.0 
-                    pitMutation mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
+                    //pitMutation mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
                 }
             }
         }
