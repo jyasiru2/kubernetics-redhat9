@@ -104,11 +104,11 @@
                 <configuration>
                     <mutationThreshold>40</mutationThreshold>
                     <outputFormats>
-                        <outputFormat>XML</outputFormat>
+                        <outputFormat>vimXML</outputFormat>
                         <outputFormat>HTML</outputFormat>
                     </outputFormats>
                 </configuration>
             </plugin>
         </plugins>
     </build>
-</project>
+</project> //test
