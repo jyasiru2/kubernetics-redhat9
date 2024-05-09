@@ -15,55 +15,60 @@ secrets_env = [
 ]
 
 deny[msg] {
-    input.Cmd == "env"
-    val := input.Value
+    input[i].Cmd == "env"
+    val := input[i].Value
     contains(lower(val[_]), secrets_env[_])
-    msg = sprintf("Potential secret in ENV key found: %s", [val])
+    msg = sprintf("Line %d: Potential secret in ENV key found: %s", [i, val])
 }
 
 # Only use trusted base images
 deny[msg] {
-    input.Cmd == "from"
-    val := split(input.Value[0], "/")
+    input[i].Cmd == "from"
+    val := split(input[i].Value[0], "/")
     count(val) > 1
-    msg = "Use a trusted base image"
+    msg = sprintf("Line %d: use a trusted base image", [i])
 }
 
-# Do not use 'latest' tag for base images
+# Do not use 'latest' tag for base imagedeny[msg] {
 deny[msg] {
-    input.Cmd == "from"
-    val := split(input.Value[0], ":")
+    input[i].Cmd == "from"
+    val := split(input[i].Value[0], ":")
     contains(lower(val[1]), "latest")
-    msg = "Do not use 'latest' tag for base images"
+    msg = sprintf("Line %d: do not use 'latest' tag for base images", [i])
 }
 
 # Avoid curl bashing
 deny[msg] {
-    input.Cmd == "run"
-    val := concat(" ", input.Value)
+    input[i].Cmd == "run"
+    val := concat(" ", input[i].Value)
     matches := regex.find_n("(curl|wget)[^|^>]*[|>]", lower(val), -1)
     count(matches) > 0
-    msg = "Avoid curl bashing"
+    msg = sprintf("Line %d: Avoid curl bashing", [i])
 }
 
 # Do not upgrade your system packages
 warn[msg] {
-    input.Cmd == "run"
-    val := concat(" ", input.Value)
+    input[i].Cmd == "run"
+    val := concat(" ", input[i].Value)
     matches := regex.match(".*?(apk|yum|dnf|apt|pip).+?(install|[dist-|check-|group]?up[grade|date]).*", lower(val))
     matches == true
-    msg = sprintf("Do not upgrade your system packages: %s", [val])
+    msg = sprintf("Line: %d: Do not upgrade your system packages: %s", [i, val])
 }
 
 # Do not use ADD if possible
 deny[msg] {
-    input.Cmd == "add"
-    msg = "Use COPY instead of ADD"
+    input[i].Cmd == "add"
+    msg = sprintf("Line %d: Use COPY instead of ADD", [i])
 }
 
 # Any user...
 any_user {
-    input.Cmd == "user"
+    input[i].Cmd == "user"
+ }
+
+deny[msg] {
+    not any_user
+    msg = "Do not run as root, use USER instead"
 }
 
 # ... but do not root
@@ -75,28 +80,28 @@ forbidden_users = [
 
 deny[msg] {
     command := "user"
-    users := [name | input.Cmd == "user"; name := input.Value]
+    users := [name | input[i].Cmd == "user"; name := input[i].Value]
     lastuser := users[count(users)-1]
     contains(lower(lastuser[_]), forbidden_users[_])
-    msg = sprintf("Last USER directive (USER %s) is forbidden", [lastuser])
+    msg = sprintf("Line %d: Last USER directive (USER %s) is forbidden", [i, lastuser])
 }
 
 # Do not sudo
 deny[msg] {
-    input.Cmd == "run"
-    val := concat(" ", input.Value)
+    input[i].Cmd == "run"
+    val := concat(" ", input[i].Value)
     contains(lower(val), "sudo")
-    msg = "Do not use 'sudo' command"
+    msg = sprintf("Line %d: Do not use 'sudo' command", [i])
 }
 
 # Use multi-stage builds
 default multi_stage = false
 multi_stage = true {
-    input.Cmd == "copy"
-    val := concat(" ", input.Flags)
+    input[i].Cmd == "copy"
+    val := concat(" ", input[i].Flags)
     contains(lower(val), "--from=")
 }
 deny[msg] {
     multi_stage == false
-    msg = "You COPY, but do not appear to use multi-stage builds..."
+    msg = sprintf("You COPY, but do not appear to use multi-stage builds...", [])
 }
