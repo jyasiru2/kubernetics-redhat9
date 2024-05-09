@@ -77,6 +77,15 @@ pipeline {
 //                 }
 //             }
 
+        post{
+            always{
+                junit 'target/surefire-reports/*.xml'
+                jacoco(execPattern: 'target/jacoco.exec')
+                dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
+                pitmutation killRatioMustImprove: false, minimumKillRatio: 50.0
+            }
+        }
+
 
         stage('Kubernetes Deployment - DEV') {
             steps {
