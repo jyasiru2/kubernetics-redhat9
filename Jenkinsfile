@@ -37,11 +37,11 @@ pipeline {
             }
         }
 
-//         stage('SCM Checkout') {
-//             steps {
-//                 checkout scm
-//             }
-//         }
+        stage('SCM Checkout') {
+            steps {
+                checkout scm
+            }
+        }
 
 //         stage('Refactoring') {
 //             steps {
