@@ -67,16 +67,16 @@ pipeline {
             }
         }
 
-//         stage('Kubernetes Deployment - DEV') {
-//             steps {
-//                 script {
-//                     withKubeConfig([credentialsId: 'kubeconfig']) {
-//                         sh '''sed -i "s|yasiru1997/numeric-app2:PLACEHOLDER|yasiru1997/numeric-app2:${GIT_COMMIT}|g" k8s_deployment_service.yaml'''
-//                         sh "kubectl apply -f k8s_deployment_service.yaml"
-//                     }
-//                 }
-//             }
-//         }
+        stage('Kubernetes Deployment - DEV') {
+            steps {
+                script {
+                    withKubeConfig([credentialsId: 'kubeconfig']) {
+                        sh '''sed -i "s|yasiru1997/numeric-app2:PLACEHOLDER|yasiru1997/numeric-app2:${GIT_COMMIT}|g" k8s_deployment_service.yaml'''
+                        sh "kubectl apply -f k8s_deployment_service.yaml"
+                    }
+                }
+            }
+        }
     }
 
 //     post {
