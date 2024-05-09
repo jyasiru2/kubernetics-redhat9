@@ -77,7 +77,7 @@ pipeline {
                 }
             }
         }
-
+    }
 
 //     post {
 //         always {
@@ -88,6 +88,4 @@ pipeline {
 //             //pitMutation mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
 //         }
 //     }
-
-
 }
