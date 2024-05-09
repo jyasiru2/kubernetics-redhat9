@@ -49,17 +49,17 @@ pipeline {
 //             }
 //         }
 
-//         stage('Docker Build and Push') {
-//             steps {
-//                 script {
-//                     withDockerRegistry([credentialsId: "docker-hub", url: ""]) {
-//                         sh 'printenv'
-//                         sh "sudo docker build -t yasiru1997/numeric-app2:${GIT_COMMIT} ."
-//                         sh "docker push yasiru1997/numeric-app2:${GIT_COMMIT}"
-//                     }
-//                 }
-//             }
-//         }
+        stage('Docker Build and Push') {
+            steps {
+                script {
+                    withDockerRegistry([credentialsId: "docker-hub", url: ""]) {
+                        sh 'printenv'
+                        sh "sudo docker build -t yasiru1997/numeric-app2:${GIT_COMMIT} ."
+                        sh "docker push yasiru1997/numeric-app2:${GIT_COMMIT}"
+                    }
+                }
+            }
+        }
 
 //         stage('Mutation Tests - PIT') {
 //             steps {
