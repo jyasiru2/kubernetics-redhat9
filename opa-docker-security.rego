@@ -90,13 +90,9 @@ deny[msg] {
 }
 
 # Use multi-stage builds
-default multi_stage = false
-multi_stage = true {
+deny[msg] {
     input.Cmd == "copy"
     val := concat(" ", input.Flags)
-    contains(lower(val), "--from=")
-}
-deny[msg] {
-    multi_stage == false
+    not contains(lower(val), "--from=")
     msg = "You COPY, but do not appear to use multi-stage builds..."
 }
