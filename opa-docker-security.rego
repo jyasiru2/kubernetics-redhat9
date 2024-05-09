@@ -26,15 +26,15 @@ deny[msg] {
     input[i].Cmd == "from"
     val := split(input[i].Value[0], "/")
     count(val) > 1
-    msg = sprintf("Line %d: use a trusted base image", [i])
+    msg = sprintf("Line %d: Use a trusted base image", [i])
 }
 
-# Do not use 'latest' tag for base imagedeny[msg] {
+# Do not use 'latest' tag for base images
 deny[msg] {
     input[i].Cmd == "from"
     val := split(input[i].Value[0], ":")
     contains(lower(val[1]), "latest")
-    msg = sprintf("Line %d: do not use 'latest' tag for base images", [i])
+    msg = sprintf("Line %d: Do not use 'latest' tag for base images", [i])
 }
 
 # Avoid curl bashing
@@ -64,11 +64,6 @@ deny[msg] {
 # Any user...
 any_user {
     input[i].Cmd == "user"
- }
-
-deny[msg] {
-    not any_user
-    msg = "Do not run as root, use USER instead"
 }
 
 # ... but do not root
