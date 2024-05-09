@@ -30,9 +30,9 @@ pipeline {
                     "Trivy Scan": {
                         sh "bash trivy-docker-image-scan.sh"
                     },
-//                     "OPA Conftest": {
-//                         sh 'docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy opa-docker-security.rego Dockerfile'
-//                     }
+                    "OPA Conftest": {
+                        sh 'docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy opa-docker-security.rego Dockerfile'
+                    }
                 )
             }
         }
@@ -42,12 +42,6 @@ pipeline {
                 checkout scm
             }
         }
-
-//         stage('Refactoring') {
-//             steps {
-//                 // Add your refactoring steps here
-//             }
-//         }
 
         stage('Docker Build and Push') {
             steps {
@@ -67,26 +61,6 @@ pipeline {
             }
         }
 
-//         post {
-//                 always {
-//                     junit 'target/surefire-reports/*.xml'
-//                     jacoco(execPattern: 'target/jacoco.exec')
-//                     dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
-//                     pitmutation killRatioMustImprove: false, minimumKillRatio: 50.0
-//                     //pitMutation mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
-//                 }
-//             }
-
-        post{
-            always{
-                junit 'target/surefire-reports/*.xml'
-                jacoco(execPattern: 'target/jacoco.exec')
-                dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
-                pitmutation killRatioMustImprove: false, minimumKillRatio: 50.0
-            }
-        }
-
-
         stage('Kubernetes Deployment - DEV') {
             steps {
                 script {
@@ -99,5 +73,12 @@ pipeline {
         }
     }
 
-
+    post {
+        always {
+            junit 'target/surefire-reports/*.xml'
+            jacoco(execPattern: 'target/jacoco.exec')
+            dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
+            pitmutation killRatioMustImprove: false, minimumKillRatio: 50.0
+        }
+    }
 }
