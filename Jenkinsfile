@@ -54,16 +54,11 @@ pipeline {
             }
         }
 
-        // stage('SonarQube Analysis') {
-        //     steps {
-        //         script {
-        //             def mvn = tool 'Default Maven';
-        //             withSonarQubeEnv() {
-        //                 sh "${mvn}/bin/mvn clean verify sonar:sonar -Dsonar.projectKey=NumericApplication -Dsonar.projectName='NumericApplication' -Dmaven.clean.failOnError=false"
-        //             }
-        //         }
-        //     }
-        // }
+        stage('Refactoring') {
+            steps {
+                // Add your refactoring steps here
+            }
+        }
 
         stage('Docker Build and Push') {
             steps {
@@ -83,20 +78,11 @@ pipeline {
             }
             post {
                 always {
-                    pitmutation killRatioMustImprove: false, minimumKillRatio: 50.0 
+                    pitmutation killRatioMustImprove: false, minimumKillRatio: 50.0
                     //pitMutation mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
                 }
             }
         }
-
-
-
-
-
-
-
-
-
 
         stage('Kubernetes Deployment - DEV') {
             steps {
@@ -107,6 +93,15 @@ pipeline {
                     }
                 }
             }
+        }
+    }
+
+    post {
+        always {
+            junit 'target/surefire-reports/*.xml'
+            jacoco execPattern: 'target/jacoco.exec'
+            pitmutation mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
+            dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
         }
     }
 }
