@@ -15,11 +15,11 @@ pipeline {
             }
         }
 
-//         stage('Vulnerability Scan - Dependency Check') {
-//             steps {
-//                 sh "mvn dependency-check:check"
-//             }
-//         }
+        stage('Vulnerability Scan - Dependency Check') {
+            steps {
+                sh "mvn dependency-check:check"
+            }
+        }
 
 //         stage('Vulnerability Scan - Docker') {
 //             steps {
