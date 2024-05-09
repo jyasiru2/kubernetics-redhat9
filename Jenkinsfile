@@ -82,9 +82,10 @@ pipeline {
     post {
         always {
             junit 'target/surefire-reports/*.xml'
-            jacoco execPattern: 'target/jacoco.exec'
-            pitmutation mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
+            jacoco(execPattern: 'target/jacoco.exec')
             dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
+            pitmutation killRatioMustImprove: false, minimumKillRatio: 50.0
+            //pitMutation mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
         }
     }
 }
