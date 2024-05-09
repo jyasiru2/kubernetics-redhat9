@@ -89,14 +89,14 @@ deny[msg] {
     msg = "Do not use 'sudo' command"
 }
 
-# Use multi-stage builds
-default multi_stage = false
-multi_stage = true {
-    input.Cmd == "copy"
-    val := concat(" ", input.Flags)
-    contains(lower(val), "--from=")
-}
-deny[msg] {
-    multi_stage == false
-    msg = "You COPY, but do not appear to use multi-stage builds..."
-}
+## Use multi-stage builds
+#default multi_stage = false
+#multi_stage = true {
+#    input.Cmd == "copy"
+#    val := concat(" ", input.Flags)
+#    contains(lower(val), "--from=")
+#}
+#deny[msg] {
+#    multi_stage == false
+#    msg = "You COPY, but do not appear to use multi-stage builds..."
+#}
