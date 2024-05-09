@@ -13,11 +13,22 @@ pipeline {
             steps {
                 sh "mvn test"
             }
+            post {
+                always {
+                    junit 'target/surefire-reports/*.xml'
+                    jacoco(execPattern: 'target/jacoco.exec')
+                }
+            }
         }
 
         stage('Vulnerability Scan - Dependency Check') {
             steps {
                 sh "mvn dependency-check:check"
+            }
+            post {
+                always {
+                    dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
+                }
             }
         }
 
@@ -30,9 +41,9 @@ pipeline {
                     "Trivy Scan": {
                         sh "bash trivy-docker-image-scan.sh"
                     },
-//                     "OPA Conftest": {
-//                         sh 'docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy opa-docker-security.rego Dockerfile'
-//                     }
+                    "OPA Conftest": {
+                        sh 'docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy opa-docker-security.rego Dockerfile'
+                    }
                 )
             }
         }
@@ -43,11 +54,16 @@ pipeline {
             }
         }
 
-//         stage('Refactoring') {
-//             steps {
-//                 // Add your refactoring steps here
-//             }
-//         }
+        // stage('SonarQube Analysis') {
+        //     steps {
+        //         script {
+        //             def mvn = tool 'Default Maven';
+        //             withSonarQubeEnv() {
+        //                 sh "${mvn}/bin/mvn clean verify sonar:sonar -Dsonar.projectKey=NumericApplication -Dsonar.projectName='NumericApplication' -Dmaven.clean.failOnError=false"
+        //             }
+        //         }
+        //     }
+        // }
 
         stage('Docker Build and Push') {
             steps {
@@ -65,27 +81,13 @@ pipeline {
             steps {
                 sh "mvn org.pitest:pitest-maven:mutationCoverage"
             }
+            post {
+                always {
+                    pitmutation killRatioMustImprove: false, minimumKillRatio: 50.0
+                    //pitMutation mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
+                }
+            }
         }
-
-//         post {
-//                 always {
-//                     junit 'target/surefire-reports/*.xml'
-//                     jacoco(execPattern: 'target/jacoco.exec')
-//                     dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
-//                     pitmutation killRatioMustImprove: false, minimumKillRatio: 50.0
-//                     //pitMutation mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
-//                 }
-//             }
-
-//         post{
-//             always{
-//                 junit 'target/surefire-reports/*.xml'
-//                 jacoco(execPattern: 'target/jacoco.exec')
-//                 dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
-//                 pitmutation killRatioMustImprove: false, minimumKillRatio: 50.0
-//             }
-//         }
-
 
         stage('Kubernetes Deployment - DEV') {
             steps {
@@ -98,6 +100,4 @@ pipeline {
             }
         }
     }
-
-
 }
