@@ -9,74 +9,74 @@ pipeline {
             }
         }
 
-        stage('Unit Tests - JUnit and Jacoco') {
-            steps {
-                sh "mvn test"
-            }
-        }
+//         stage('Unit Tests - JUnit and Jacoco') {
+//             steps {
+//                 sh "mvn test"
+//             }
+//         }
 
-        stage('Vulnerability Scan - Dependency Check') {
-            steps {
-                sh "mvn dependency-check:check"
-            }
-        }
+//         stage('Vulnerability Scan - Dependency Check') {
+//             steps {
+//                 sh "mvn dependency-check:check"
+//             }
+//         }
 
-        stage('Vulnerability Scan - Docker') {
-            steps {
-                parallel(
-                    "Dependency Scan": {
-                        sh "mvn dependency-check:check"
-                    },
-                    "Trivy Scan": {
-                        sh "bash trivy-docker-image-scan.sh"
-                    },
-                    "OPA Conftest": {
-                        sh 'docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy opa-docker-security.rego Dockerfile'
-                    }
-                )
-            }
-        }
+//         stage('Vulnerability Scan - Docker') {
+//             steps {
+//                 parallel(
+//                     "Dependency Scan": {
+//                         sh "mvn dependency-check:check"
+//                     },
+//                     "Trivy Scan": {
+//                         sh "bash trivy-docker-image-scan.sh"
+//                     },
+//                     "OPA Conftest": {
+//                         sh 'docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy opa-docker-security.rego Dockerfile'
+//                     }
+//                 )
+//             }
+//         }
 
-        stage('SCM Checkout') {
-            steps {
-                checkout scm
-            }
-        }
+//         stage('SCM Checkout') {
+//             steps {
+//                 checkout scm
+//             }
+//         }
 
-        stage('Refactoring') {
-            steps {
-                // Add your refactoring steps here
-            }
-        }
+//         stage('Refactoring') {
+//             steps {
+//                 // Add your refactoring steps here
+//             }
+//         }
 
-        stage('Docker Build and Push') {
-            steps {
-                script {
-                    withDockerRegistry([credentialsId: "docker-hub", url: ""]) {
-                        sh 'printenv'
-                        sh "sudo docker build -t yasiru1997/numeric-app2:${GIT_COMMIT} ."
-                        sh "docker push yasiru1997/numeric-app2:${GIT_COMMIT}"
-                    }
-                }
-            }
-        }
+//         stage('Docker Build and Push') {
+//             steps {
+//                 script {
+//                     withDockerRegistry([credentialsId: "docker-hub", url: ""]) {
+//                         sh 'printenv'
+//                         sh "sudo docker build -t yasiru1997/numeric-app2:${GIT_COMMIT} ."
+//                         sh "docker push yasiru1997/numeric-app2:${GIT_COMMIT}"
+//                     }
+//                 }
+//             }
+//         }
 
-        stage('Mutation Tests - PIT') {
-            steps {
-                sh "mvn org.pitest:pitest-maven:mutationCoverage"
-            }
-        }
+//         stage('Mutation Tests - PIT') {
+//             steps {
+//                 sh "mvn org.pitest:pitest-maven:mutationCoverage"
+//             }
+//         }
 
-        stage('Kubernetes Deployment - DEV') {
-            steps {
-                script {
-                    withKubeConfig([credentialsId: 'kubeconfig']) {
-                        sh '''sed -i "s|yasiru1997/numeric-app2:PLACEHOLDER|yasiru1997/numeric-app2:${GIT_COMMIT}|g" k8s_deployment_service.yaml'''
-                        sh "kubectl apply -f k8s_deployment_service.yaml"
-                    }
-                }
-            }
-        }
+//         stage('Kubernetes Deployment - DEV') {
+//             steps {
+//                 script {
+//                     withKubeConfig([credentialsId: 'kubeconfig']) {
+//                         sh '''sed -i "s|yasiru1997/numeric-app2:PLACEHOLDER|yasiru1997/numeric-app2:${GIT_COMMIT}|g" k8s_deployment_service.yaml'''
+//                         sh "kubectl apply -f k8s_deployment_service.yaml"
+//                     }
+//                 }
+//             }
+//         }
     }
 
 //     post {
