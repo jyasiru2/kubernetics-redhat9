@@ -9,11 +9,11 @@ pipeline {
             }
         }
 
-//         stage('Unit Tests - JUnit and Jacoco') {
-//             steps {
-//                 sh "mvn test"
-//             }
-//         }
+        stage('Unit Tests - JUnit and Jacoco') {
+            steps {
+                sh "mvn test"
+            }
+        }
 
 //         stage('Vulnerability Scan - Dependency Check') {
 //             steps {
