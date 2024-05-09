@@ -43,6 +43,12 @@ pipeline {
             }
         }
 
+//         stage('Refactoring') {
+//             steps {
+//                 // Add your refactoring steps here
+//             }
+//         }
+
         stage('Docker Build and Push') {
             steps {
                 script {
@@ -61,6 +67,26 @@ pipeline {
             }
         }
 
+//         post {
+//                 always {
+//                     junit 'target/surefire-reports/*.xml'
+//                     jacoco(execPattern: 'target/jacoco.exec')
+//                     dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
+//                     pitmutation killRatioMustImprove: false, minimumKillRatio: 50.0
+//                     //pitMutation mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
+//                 }
+//             }
+
+        post{
+            always{
+                junit 'target/surefire-reports/*.xml'
+                jacoco(execPattern: 'target/jacoco.exec')
+                dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
+                pitmutation killRatioMustImprove: false, minimumKillRatio: 50.0
+            }
+        }
+
+
         stage('Kubernetes Deployment - DEV') {
             steps {
                 script {
@@ -73,12 +99,5 @@ pipeline {
         }
     }
 
-    post {
-        always {
-            junit 'target/surefire-reports/*.xml'
-            jacoco(execPattern: 'target/jacoco.exec')
-            dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
-            pitmutation killRatioMustImprove: false, minimumKillRatio: 50.0
-        }
-    }
+
 }
