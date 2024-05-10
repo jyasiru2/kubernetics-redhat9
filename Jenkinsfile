@@ -66,6 +66,7 @@ pipeline {
                 sh "mvn org.pitest:pitest-maven:mutationCoverage"
             }
             post {
+
                 always {
                     pitmutation killRatioMustImprove: false, minimumKillRatio: 50.0 
                     pitMutation mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
@@ -85,5 +86,6 @@ pipeline {
         }
     }
 }
+//
 //
 //
