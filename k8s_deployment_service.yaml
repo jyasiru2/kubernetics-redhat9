@@ -20,7 +20,9 @@ spec:
         - image: replace   # Placeholder for the container image (to be replaced)
           name: devsecops-container  # Name of the container
           securityContext:
-            runAsNonRoot: true  # Ensure container runs as non-root for security
+            runAsNonRoot: true
+            runAsUser: 100
+          # Ensure container runs as non-root for security
 
 ---
 # Define a Kubernetes Service object
