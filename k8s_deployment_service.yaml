@@ -1,35 +1,40 @@
+# Define a Kubernetes Deployment object
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: devsecops
-  name: devsecops
+    app: devsecops       # Label for identifying this deployment
+  name: devsecops        # Name of the deployment
 spec:
-  replicas: 2
+  replicas: 2            # Desired number of replicas (instances) of the application
   selector:
     matchLabels:
-      app: devsecops
-  strategy: {}
+      app: devsecops     # Selector to match Pods managed by this deployment
+  strategy: {}           # Deployment strategy (e.g., rolling update, recreate)
   template:
     metadata:
       labels:
-        app: devsecops
+        app: devsecops   # Labels for Pods created by this deployment
     spec:
       containers:
-      - image: replace
-        name: devsecops-container
+        - image: replace   # Placeholder for the container image (to be replaced)
+          name: devsecops-container  # Name of the container
+          securityContext:
+            runAsNonRoot: true  # Ensure container runs as non-root for security
+
 ---
+# Define a Kubernetes Service object
 apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: devsecops
-  name: devsecops-svc
+    app: devsecops       # Label for identifying this service
+  name: devsecops-svc    # Name of the service
 spec:
   ports:
-  - port: 8080
-    protocol: TCP
-    targetPort: 8080
+    - port: 8080           # Port exposed by the service
+      protocol: TCP        # Protocol used (TCP)
+      targetPort: 8080     # Port on the Pods targeted by the service
   selector:
-    app: devsecops
-  type: NodePort
+    app: devsecops       # Selector to route traffic to Pods with matching labels
+  type: NodePort         # Type of service (NodePort: exposes service on a port on each node)
