@@ -17,7 +17,7 @@ spec:
         app: devsecops   # Labels for Pods created by this deployment
     spec:
       containers:
-        - image: adoptopenjdk/openjdk8:alpine-slim   # Placeholder for the container image (to be replaced)
+        - image: replace  # Placeholder for the container image (to be replaced)
           name: devsecops-container  # Name of the container
           securityContext:
             runAsNonRoot: true
