@@ -1,6 +1,17 @@
 pipeline {
     agent any
 
+    environment {
+        deploymentName = "devsecops"
+        containerName = "devsecops-container"
+        serviceName = "devsecops-svc"
+        imageName = "yasiru1997/numeric-app2:${GIT_COMMIT}"
+        applicationURL = "http://devsecops-demo.eastus.cloudapp.azure.com/"
+        applicationURI = "/increment/99"
+      }
+
+
+
     stages {
         // Stage to build the Maven artifact
         stage('Build Artifact - Maven') {
@@ -74,17 +85,42 @@ pipeline {
               }
             }
 
-        // Stage to deploy to Kubernetes environment (DEV)
-        stage('Kubernetes Deployment - DEV') {
-            steps {
-                script {
+
+        stage('K8S Deployment - DEV') {
+              steps {
+                parallel(
+                  "Deployment": {
                     withKubeConfig([credentialsId: 'kubeconfig']) {
-                        sh '''sed -i "s|yasiru1997/numeric-app2:PLACEHOLDER|yasiru1997/numeric-app2:${GIT_COMMIT}|g" k8s_deployment_service.yaml''' // Replace placeholder with image tag
-                        sh "kubectl apply -f k8s_deployment_service.yaml" // Apply Kubernetes deployment
+                      sh "bash k8s-deployment.sh"
                     }
-                }
+                  },
+                  "Rollout Status": {
+                    withKubeConfig([credentialsId: 'kubeconfig']) {
+                      sh "bash k8s-deployment-rollout-status.sh"
+                    }
+                  }
+                )
+              }
             }
-        }
+
+
+
+
+//         // Stage to deploy to Kubernetes environment (DEV)
+//         stage('Kubernetes Deployment - DEV') {
+//             steps {
+//                 script {
+//                     withKubeConfig([credentialsId: 'kubeconfig']) {
+//                         sh '''sed -i "s|yasiru1997/numeric-app2:PLACEHOLDER|yasiru1997/numeric-app2:${GIT_COMMIT}|g" k8s_deployment_service.yaml''' // Replace placeholder with image tag
+//                         sh "kubectl apply -f k8s_deployment_service.yaml" // Apply Kubernetes deployment
+//                     }
+//                 }
+//             }
+//         }
+
+
+
+
     }
 
     post {
