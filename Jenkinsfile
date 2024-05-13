@@ -8,9 +8,7 @@ pipeline {
         imageName = "yasiru1997/numeric-app2:${GIT_COMMIT}"
         applicationURL = "http://34.125.206.41:8080/"
         applicationURI = "/increment/99"
-      }
-
-
+    }
 
     stages {
         // Stage to build the Maven artifact
@@ -80,47 +78,27 @@ pipeline {
         }
 
         stage('Vulnerability Scan - Kubernetes(k8s)') {
-              steps {
+            steps {
                 sh 'docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy opa-k8s-security.rego k8s_deployment_service.yaml'
-              }
             }
-
+        }
 
         stage('K8S Deployment - DEV') {
-              steps {
+            steps {
                 parallel(
-                  "Deployment": {
-                    withKubeConfig([credentialsId: 'kubeconfig']) {
-                      sh "bash k8s-deployment.sh"
+                    "Deployment": {
+                        withKubeConfig([credentialsId: 'kubeconfig']) {
+                            sh "bash k8s-deployment.sh"
+                        }
                     }
-                  },
-//                   "Rollout Status": {
-//                     withKubeConfig([credentialsId: 'kubeconfig']) {
-//                       sh "bash k8s-deployment-rollout-status.sh"
-///                     }
-                  }
+                    // "Rollout Status": {
+                    //   withKubeConfig([credentialsId: 'kubeconfig']) {
+                    //     sh "bash k8s-deployment-rollout-status.sh"
+                    //   }
+                    // }
                 )
-              }
             }
-
-
-
-
-//         // Stage to deploy to Kubernetes environment (DEV)
-//         stage('Kubernetes Deployment - DEV') {
-//             steps {
-//                 script {
-//                     withKubeConfig([credentialsId: 'kubeconfig']) {
-//                         sh '''sed -i "s|yasiru1997/numeric-app2:PLACEHOLDER|yasiru1997/numeric-app2:${GIT_COMMIT}|g" k8s_deployment_service.yaml''' // Replace placeholder with image tag
-//                         sh "kubectl apply -f k8s_deployment_service.yaml" // Apply Kubernetes deployment
-//                     }
-//                 }
-//             }
-//         }
-
-
-
-
+        }
     }
 
     post {
@@ -132,4 +110,3 @@ pipeline {
         }
     }
 }
-//
